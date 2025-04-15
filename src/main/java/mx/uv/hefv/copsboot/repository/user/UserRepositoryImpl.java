@@ -10,6 +10,7 @@ import mx.uv.hefv.copsboot.jpa.UniqueIdGenerator;
 import mx.uv.hefv.copsboot.jpa.UserId;
 
 
+
 @Component
 public class UserRepositoryImpl implements UserRepositoryCustom {
     private final UniqueIdGenerator<UUID> uniqueIdGenerator;

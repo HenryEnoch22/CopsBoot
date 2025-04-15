@@ -1,37 +1,36 @@
 package mx.uv.hefv.copsboot.models.user;
 
-import java.util.Set;
+import jakarta.persistence.Column;
 
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Table;
 import mx.uv.hefv.copsboot.jpa.AbstractEntity;
 import mx.uv.hefv.copsboot.jpa.UserId;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class User extends AbstractEntity<UserId>{
     
     private String name;
     private String email;
     private String password;
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    //@ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
-    private Set<UserRole> roles;
+    @Column(name = "role")
+    private UserRole role;
 
     public User() {
     }
 
-    public User(UserId id, String name, String email, String password, Set<UserRole> roles) {
+    public User(UserId id, String name, String email, String password, UserRole role) {
         super(id);
         this.name = name;
         this.email = email;
         this.password = password;
-        this.roles = roles;
+        this.role = role;
     }
 
     public String getName() {
@@ -58,12 +57,12 @@ public class User extends AbstractEntity<UserId>{
         this.password = password;
     }
 
-    public Set<UserRole> getRoles() {
-        return roles;
+    public UserRole getRoles() {
+        return role;
     }
 
-    public void setRoles(Set<UserRole> roles) {
-        this.roles = roles;
+    public void setRoles(UserRole role) {
+        this.role = role;
     }
 
     

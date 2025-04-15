@@ -8,10 +8,12 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Table;
+import mx.uv.hefv.copsboot.jpa.AbstractEntity;
+import mx.uv.hefv.copsboot.jpa.UserId;
 
 @Entity
 @Table(name = "user")
-public class User {
+public class User extends AbstractEntity<UserId>{
     
     private String name;
     private String email;
@@ -24,7 +26,8 @@ public class User {
     public User() {
     }
 
-    public User(String name, String email, String password, Set<UserRole> roles) {
+    public User(UserId id, String name, String email, String password, Set<UserRole> roles) {
+        super(id);
         this.name = name;
         this.email = email;
         this.password = password;

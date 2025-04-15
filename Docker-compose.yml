@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: copsboot_app
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/copsbootdb?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: appuser
+      SPRING_DATASOURCE_PASSWORD: apppassword
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - copsboot-network
+
+  mysql:
+    image: mysql:8.0
+    container_name: copsboot_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: copsbootdb
+      MYSQL_USER: appuser
+      MYSQL_PASSWORD: apppassword
+    command: 
+      - --default-authentication-plugin=mysql_native_password
+      - --bind-address=0.0.0.0
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "--password=rootpassword"]
+      interval: 5s
+      timeout: 10s
+      retries: 10
+    networks:
+      - copsboot-network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: copsboot_phpmyadmin
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: root
+      PMA_PASSWORD: rootpassword
+    depends_on:
+      - mysql
+    networks:
+      - copsboot-network
+
+volumes:
+  mysql-data:
+
+networks:
+  copsboot-network:
+    driver: bridge
